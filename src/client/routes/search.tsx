@@ -8,7 +8,7 @@ export const SearchView = () => {
   const { data } = trpc.entrySearch.useQuery(q!);
   return (
     <div>
-      <h1>Search for {q}</h1>
+      <h1 className="text-center text-2xl font-thin">results for "{q}"</h1>
       <ul>
         {data
           ?.sort((a, b) =>

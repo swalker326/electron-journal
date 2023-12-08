@@ -47,6 +47,67 @@ export const appRouter = t.router({
     .query(({ input }) => {
       return prisma.entry.findMany({ take: input?.limit || 10 });
     }),
+  entryCreate: t.procedure
+    .input(
+      z.object({
+        name: z.string(),
+        content: z.string()
+      })
+    )
+    .mutation(async ({ input: { name, content } }) => {
+      const entry = await prisma.entry.create({
+        data: {
+          title: name,
+          content
+        }
+      });
+
+      return entry;
+    }),
+  entryUpsert: t.procedure
+    .input(
+      z.object({
+        id: z.number().optional(),
+        title: z.string(),
+        content: z.string()
+      })
+    )
+    .mutation(async ({ input: { id = -1, title, content } }) => {
+      const entry = await prisma.entry.upsert({
+        where: { id: id },
+        update: {
+          title,
+          content
+        },
+        create: {
+          title,
+          content
+        }
+      });
+
+      return entry;
+    }),
+  entryUpdate: t.procedure
+    .input(
+      z.object({
+        id: z.number(),
+        title: z.string(),
+        content: z.string()
+      })
+    )
+    .mutation(async ({ input: { id, title, content } }) => {
+      const entry = await prisma.entry.update({
+        where: {
+          id
+        },
+        data: {
+          title,
+          content
+        }
+      });
+
+      return entry;
+    }),
   entrySearch: t.procedure.input(z.string()).query(async ({ input }) => {
     const results = await prisma.entry.findMany();
     console.log(results);

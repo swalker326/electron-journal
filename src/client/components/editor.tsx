@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
+import { trpc } from "../util";
 
 export const Editor = ({
   newEntry,
@@ -8,32 +9,51 @@ export const Editor = ({
   newEntry: { title: string; content: string };
   setNewEntry: Dispatch<SetStateAction<{ title: string; content: string }>>;
 }) => {
-  const [edited, setEdited] = useState(false);
   const [saved, setSaved] = useState(true);
-  const [needsSave, setNeedsSave] = useState(edited || !saved);
+  const { mutate, data, error } = trpc.entryUpsert.useMutation();
+  const handleSave = async () => {
+    if (newEntry.title === "" || newEntry.content === "") {
+      return;
+    }
+    await mutate({ id: data?.id, ...newEntry });
+    setSaved(true);
+  };
   useEffect(() => {});
   return (
     <div className="w-full h-full flex-grow">
-      <h1 className="text-5xl text-red-500">Editor</h1>
+      <h1 className="text-5xl text-red-500 py-1">Thoughts</h1>
       <div>
         <Tabs defaultValue="edit" className="w-full">
           <TabsList className="w-full">
-            <TabsTrigger value="edit">Edit {needsSave ? "*" : ""}</TabsTrigger>
+            <TabsTrigger value="edit">Edit</TabsTrigger>
             <TabsTrigger value="preview">Preview</TabsTrigger>
           </TabsList>
+          <div className="w-full flex justify-end">
+            {saved ? (
+              <span className="text-gray-400 text-sm font-light">saved</span>
+            ) : (
+              <span className="text-gray-700 text-sm font-light">*unsaved</span>
+            )}
+          </div>
           <TabsContent value="edit">
-            <div className="w-full flex flex-col gap-2">
+            <div className="w-full flex flex-col gap-2 relative">
               <input
                 name="title"
                 placeholder="Title"
                 value={newEntry.title}
                 className="p-2 rounded-md border border-gray-200"
+                onChange={(e) => {
+                  setSaved(false);
+                  setNewEntry(() => {
+                    return { ...newEntry, title: e.target.value };
+                  });
+                }}
               />
               <textarea
                 placeholder="Express yourself..."
                 value={newEntry.content}
                 onChange={(e) => {
-                  setEdited(true);
+                  setSaved(false);
                   setNewEntry(() => {
                     return { ...newEntry, content: e.target.value };
                   });
@@ -41,6 +61,12 @@ export const Editor = ({
                 cols={23}
                 className="p-2 w-full h-[20rem] border border-gray-200 rounded-md resize-none overflow-auto"
               />
+              <button
+                onClick={handleSave}
+                className="absolute bottom-3 right-3"
+              >
+                Save
+              </button>
             </div>
           </TabsContent>
           <TabsContent value="preview">
@@ -50,6 +76,11 @@ export const Editor = ({
           </TabsContent>
         </Tabs>
       </div>
+      {error && (
+        <div className="bg-red-500 text-white p-2 rounded-md">
+          {error.message}
+        </div>
+      )}
     </div>
   );
 };

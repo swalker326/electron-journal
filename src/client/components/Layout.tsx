@@ -8,19 +8,13 @@ import useDebouncedCallback from "../hooks/useDebounceCallback";
 import { useState } from "react";
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
-  const [search, setSearch] = useState("");
-
-  const handleSubmit = (s: string) => {
-    console.log("submitting search form");
-    navigate(`/search?q=${s}`);
-  };
+  const handleSubmit = (s: string) => navigate(`/search?q=${s}`);
   const debouncedSubmit = useDebouncedCallback(
     (searchValue: string) => handleSubmit(searchValue),
     700
   );
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newSearchValue = event.target.value;
-    setSearch(newSearchValue);
     debouncedSubmit(newSearchValue);
   };
 
