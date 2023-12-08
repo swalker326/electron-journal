@@ -1,13 +1,8 @@
-import { initTRPC } from "@trpc/server";
-import { prisma } from "./prisma";
-import superjson from "superjson";
 import { z } from "zod";
+import { prisma } from "../prisma";
+import { t } from "../router";
 
-export const t = initTRPC.create({
-  transformer: superjson
-});
-
-export const appRouter = t.router({
+export const userRouter = t.router({
   users: t.procedure.query(() => {
     return prisma.user.findMany();
   }),
@@ -41,26 +36,5 @@ export const appRouter = t.router({
       });
 
       return user;
-    }),
-  entries: t.procedure
-    .input(z.object({ limit: z.number() }).optional())
-    .query(({ input }) => {
-      return prisma.entry.findMany({ take: input?.limit || 10 });
-    }),
-  entryById: t.procedure
-    .input((val: unknown) => {
-      if (typeof val !== "number") {
-        throw new Error("invalid input");
-      }
-      return val;
-    })
-    .query(({ input: id }) => {
-      return prisma.entry.findUnique({
-        where: {
-          id
-        }
-      });
     })
 });
-
-export type AppRouter = typeof appRouter;

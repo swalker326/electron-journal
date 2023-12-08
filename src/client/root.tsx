@@ -1,9 +1,10 @@
 import {
-  MemoryRouter as Router,
+  createMemoryRouter,
   Routes,
   Route,
   Link,
-  Outlet
+  Outlet,
+  RouterProvider
 } from "react-router-dom";
 import { trpc } from "./util";
 import { loggerLink, httpBatchLink } from "@trpc/client";
@@ -13,15 +14,11 @@ import superjson from "superjson";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Home } from "./views/Home";
 import "./global.css";
+import { Layout } from "./components/Layout";
+import { Entry } from "./routes/entry";
+import { EntryId } from "./routes/$entryId";
 
-// import icon from '../../assets/icon.svg';
-// import "./global.css";
-// import { Form } from "./components/ui/form";
-// import { AppNav } from "./components/ui/nav/AppNav";
-// import { History } from "./views/History";
-// import { Home } from "./views/Home";
-
-function Layout() {
+function Index() {
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -72,7 +69,9 @@ function Layout() {
       <div className="container">
         <trpc.Provider client={trpcClient} queryClient={queryClient}>
           <QueryClientProvider client={queryClient}>
-            <Outlet />
+            <Layout>
+              <Outlet />
+            </Layout>
           </QueryClientProvider>
         </trpc.Provider>
       </div>
@@ -80,15 +79,23 @@ function Layout() {
   );
 }
 
+const Router = createMemoryRouter([
+  {
+    path: "/",
+    element: <Index />,
+    children: [
+      { path: "/", element: <Home /> },
+      {
+        path: "/entries",
+        children: [
+          { index: true, element: <Entry /> },
+          { path: ":entryId", element: <EntryId /> }
+        ]
+      }
+    ]
+  }
+]);
+
 export default function App() {
-  return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path="/history" element={<>History</>} />
-        </Route>
-      </Routes>
-    </Router>
-  );
+  return <RouterProvider router={Router} />;
 }

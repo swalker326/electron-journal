@@ -1,17 +1,12 @@
+import { RecentEntries } from "../components/RecentEntries";
 import { trpc } from "../util";
 
 export const Home = () => {
-  const { data } = trpc.users.useQuery();
+  const { data } = trpc.userById.useQuery(1);
   console.log("users1", data);
   return (
     <div>
-      <h1 className="text-5xl text-red-500">Home</h1>
-      <p>Welcome home!</p>
-      {data?.map((user) => (
-        <div key={user.id}>
-          <h2>{user.name}</h2>
-        </div>
-      ))}
+      <RecentEntries />
     </div>
   );
 };
