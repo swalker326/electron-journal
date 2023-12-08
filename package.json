@@ -43,13 +43,18 @@
     "@trpc/react-query": "^10.44.1",
     "@trpc/server": "^10.5.0",
     "@vitejs/plugin-react": "^4.2.1",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.0.0",
     "date-fns": "^2.30.0",
     "electron-log": "^4.4.8",
+    "lucide-react": "^0.294.0",
     "prisma": "^5.7.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.20.1",
     "superjson": "^1.12.1",
+    "tailwind-merge": "^2.1.0",
+    "tailwindcss-animate": "^1.0.7",
     "zod": "^3.20.2"
   }
 }

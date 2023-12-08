@@ -8,12 +8,6 @@
     "allowSyntheticDefaultImports": true,
     "jsx": "react-jsx"
   },
-  "include": [
-    "**/*",
-    "../api.d.ts"
-  ],
-  "exclude": [
-    "../../node_modules",
-    "../server"
-  ],
+  "include": ["**/*", "../api.d.ts", "../../@/lib", "../../@/lib"],
+  "exclude": ["../../node_modules", "../server"]
 }

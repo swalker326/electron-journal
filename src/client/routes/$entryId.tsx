@@ -4,7 +4,7 @@ import { trpc } from "../util";
 export const EntryId = () => {
   const { entryId } = useParams();
   if (!entryId) throw new Error("No entryId");
-  const { data, error } = trpc.entryById.useQuery(1);
+  const { data, error } = trpc.entryById.useQuery(parseInt(entryId));
   if (error) {
     return <p>Error: {error.message}</p>;
   }
