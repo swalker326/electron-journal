@@ -1,3 +1,8 @@
+# Credit 
+This app was created from the sample repo provided by: [awohletz](https://github.com/awohletz)
+
+Without [this](https://github.com/awohletz/electron-prisma-trpc-example/tree/react) sample app, I would still be a cli tool, thank you!
+
 # Purpose
 This repo demonstrates:
 - Using tRPC over IPC to communicate between the main and renderer processes.
