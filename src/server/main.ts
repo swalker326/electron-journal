@@ -7,20 +7,22 @@ import fs from "fs";
 import {dbPath, dbUrl, latestMigration, Migration} from "./constants";
 import log from "electron-log";
 import {prisma, runPrismaCommand} from "./prisma";
+import { resolveHtmlPath } from "./utils";
 
 const createWindow = async () => {
-
   let needsMigration;
   const dbExists = fs.existsSync(dbPath);
   if (!dbExists) {
     needsMigration = true;
     // prisma for whatever reason has trouble if the database file does not exist yet.
     // So just touch it here
-    fs.closeSync(fs.openSync(dbPath, 'w'));
+    fs.closeSync(fs.openSync(dbPath, "w"));
   } else {
     try {
-      const latest: Migration[] = await prisma.$queryRaw`select * from _prisma_migrations order by finished_at`;
-      needsMigration = latest[latest.length-1]?.migration_name !== latestMigration;
+      const latest: Migration[] =
+        await prisma.$queryRaw`select * from _prisma_migrations order by finished_at`;
+      needsMigration =
+        latest[latest.length - 1]?.migration_name !== latestMigration;
     } catch (e) {
       log.error(e);
       needsMigration = true;
@@ -30,11 +32,13 @@ const createWindow = async () => {
   if (needsMigration) {
     try {
       const schemaPath = path.join(
-        app.getAppPath().replace('app.asar', 'app.asar.unpacked'),
-        'prisma',
+        app.getAppPath().replace("app.asar", "app.asar.unpacked"),
+        "prisma",
         "schema.prisma"
       );
-      log.info(`Needs a migration. Running prisma migrate with schema path ${schemaPath}`);
+      log.info(
+        `Needs a migration. Running prisma migrate with schema path ${schemaPath}`
+      );
 
       // first create or migrate the database! If you were deploying prisma to a cloud service, this migrate deploy
       // command you would run as part of your CI/CD deployment. Since this is an electron app, it just needs
@@ -44,12 +48,11 @@ const createWindow = async () => {
         command: ["migrate", "deploy", "--schema", schemaPath],
         dbUrl
       });
-      log.info("Migration done.")
+      log.info("Migration done.");
 
       // seed
       // log.info("Seeding...");
       // await seed(prisma);
-
     } catch (e) {
       log.error(e);
       process.exit(1);
@@ -65,9 +68,9 @@ const createWindow = async () => {
 
     if (parsedUrl.dir.includes("assets")) {
       const webAssetPath = path.join(__dirname, "..", "assets", parsedUrl.base);
-      callback({path: webAssetPath})
+      callback({ path: webAssetPath });
     } else {
-      callback({url: request.url});
+      callback({ url: request.url });
     }
   });
 
@@ -75,12 +78,12 @@ const createWindow = async () => {
     width: 1024,
     height: 1024,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
-    },
+      preload: path.join(__dirname, "preload.js")
+    }
   });
 
-  win.loadFile(path.join(__dirname, '..', 'index.html'));
-  win.webContents.openDevTools()
+  win.loadURL(resolveHtmlPath("index.html"));
+  win.webContents.openDevTools();
 };
 
 app.whenReady().then(() => {

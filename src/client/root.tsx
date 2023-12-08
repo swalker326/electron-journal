@@ -12,6 +12,7 @@ import { IpcRequest } from "../api";
 import superjson from "superjson";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Home } from "./views/Home";
+import "./global.css";
 
 // import icon from '../../assets/icon.svg';
 // import "./global.css";
