@@ -2,8 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
-  output   = "../src/generated/client"
+  provider      = "prisma-client-js"
+  output        = "../src/generated/client"
   binaryTargets = ["native", "darwin", "darwin-arm64"]
 }
 
@@ -13,6 +13,14 @@ datasource db {
 }
 
 model User {
-  id        Int @id @default(autoincrement())
-  name      String
+  id   Int    @id @default(autoincrement())
+  name String
+}
+
+model Entry {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

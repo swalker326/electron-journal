@@ -1,18 +1,19 @@
-import {AnyRouter, inferRouterContext} from "@trpc/server";
-import {HTTPRequest} from "@trpc/server/dist/http/internals/types";
-import {IpcRequest, IpcResponse} from "../api";
-import {resolveHTTPResponse} from "@trpc/server/http";
+import { AnyRouter, inferRouterContext } from "@trpc/server";
+//@ts-expect-error
+import { HTTPRequest } from "@trpc/server/dist/http/internals/types";
+import { IpcRequest, IpcResponse } from "../api";
+import { resolveHTTPResponse } from "@trpc/server/http";
 
-export async function ipcRequestHandler<TRouter extends AnyRouter>(
-  opts: {
+export async function ipcRequestHandler<TRouter extends AnyRouter>(opts: {
+  req: IpcRequest;
+  router: TRouter;
+  batching?: { enabled: boolean };
+  onError?: (o: { error: Error; req: IpcRequest }) => void;
+  endpoint: string;
+  createContext?: (params: {
     req: IpcRequest;
-    router: TRouter;
-    batching?: {enabled: boolean};
-    onError?: (o: {error: Error; req: IpcRequest}) => void;
-    endpoint: string;
-    createContext?: (params: {req: IpcRequest}) => Promise<inferRouterContext<TRouter>>;
-  },
-): Promise<IpcResponse> {
+  }) => Promise<inferRouterContext<TRouter>>;
+}): Promise<IpcResponse> {
   const createContext = async () => {
     return opts.createContext?.({ req: opts.req });
   };
@@ -24,7 +25,7 @@ export async function ipcRequestHandler<TRouter extends AnyRouter>(
     query: url.searchParams,
     method: opts.req.method,
     headers: opts.req.headers,
-    body: opts.req.body,
+    body: opts.req.body
   };
 
   const result = await resolveHTTPResponse({
@@ -35,12 +36,12 @@ export async function ipcRequestHandler<TRouter extends AnyRouter>(
     batching: opts.batching,
     onError(o) {
       opts?.onError?.({ ...o, req: opts.req });
-    },
+    }
   });
 
   return {
     body: result.body,
     headers: result.headers,
-    status: result.status,
+    status: result.status
   };
 }
