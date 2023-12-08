@@ -47,6 +47,15 @@ export const appRouter = t.router({
     .query(({ input }) => {
       return prisma.entry.findMany({ take: input?.limit || 10 });
     }),
+  entrySearch: t.procedure.input(z.string()).query(async ({ input }) => {
+    const results = await prisma.entry.findMany();
+    console.log(results);
+    return results.filter((entry) => {
+      const titleMatch = entry.title.includes(input);
+      const contentMatch = entry.content.includes(input);
+      return titleMatch || contentMatch;
+    });
+  }),
   entryById: t.procedure
     .input((val: unknown) => {
       if (typeof val !== "number") {

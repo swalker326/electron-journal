@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { trpc } from "../util";
 
-export const EntryId = () => {
+export const EntryIdView = () => {
   const { entryId } = useParams();
   if (!entryId) throw new Error("No entryId");
   const { data, error } = trpc.entryById.useQuery(parseInt(entryId));

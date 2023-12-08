@@ -15,8 +15,9 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Home } from "./views/Home";
 import "./global.css";
 import { Layout } from "./components/Layout";
-import { Entry } from "./routes/entry";
-import { EntryId } from "./routes/$entryId";
+import { EntryView } from "./routes/entry";
+import { EntryIdView } from "./routes/$entryId";
+import { SearchView } from "./routes/search";
 
 function Index() {
   const [queryClient] = useState(
@@ -64,17 +65,14 @@ function Index() {
     })
   );
   return (
-    <div className="flex flex-col items-between">
-      {/* <AppNav /> */}
-      <div className="container">
-        <trpc.Provider client={trpcClient} queryClient={queryClient}>
-          <QueryClientProvider client={queryClient}>
-            <Layout>
-              <Outlet />
-            </Layout>
-          </QueryClientProvider>
-        </trpc.Provider>
-      </div>
+    <div className="container h-screen">
+      <trpc.Provider client={trpcClient} queryClient={queryClient}>
+        <QueryClientProvider client={queryClient}>
+          <Layout>
+            <Outlet />
+          </Layout>
+        </QueryClientProvider>
+      </trpc.Provider>
     </div>
   );
 }
@@ -84,12 +82,13 @@ const Router = createMemoryRouter([
     path: "/",
     element: <Index />,
     children: [
+      { path: "/search", element: <SearchView /> },
       { path: "/", element: <Home /> },
       {
         path: "/entries",
         children: [
-          { index: true, element: <Entry /> },
-          { path: ":entryId", element: <EntryId /> }
+          { index: true, element: <EntryView /> },
+          { path: ":entryId", element: <EntryIdView /> }
         ]
       }
     ]
