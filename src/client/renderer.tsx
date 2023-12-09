@@ -1,10 +1,10 @@
 import { createRoot } from "react-dom/client";
 import { createTRPCProxyClient, httpBatchLink, loggerLink } from "@trpc/client";
-import { createTRPCReact } from "@trpc/react-query";
 import type { AppRouter } from "../server/router";
 import { IpcRequest } from "../api";
 import superjson from "superjson";
 import App from "./root";
+
 // export const trpc = createTRPCReact<AppRouter>();
 export const trpc = createTRPCProxyClient<AppRouter>({
   transformer: superjson,
