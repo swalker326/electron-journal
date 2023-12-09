@@ -55,7 +55,6 @@ export const mePath = path.join(
   extraResourcesPath,
   platformToExecutables[platformName].migrationEngine
 );
-console.log("---mePath---", mePath);
 export const qePath = path.join(
   extraResourcesPath,
   platformToExecutables[platformName].queryEngine

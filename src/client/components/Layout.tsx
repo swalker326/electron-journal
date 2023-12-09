@@ -26,13 +26,12 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
       {location.search} */}
       <div className="flex items-center justify-between">
         <Link to="/">
-          <h1 className="text-5xl font-semibold">Journal</h1>
+          <h1 className="text-5xl">Journal</h1>
         </Link>
         <form
           onSubmit={(e) => {
             e.preventDefault();
             const value = e.currentTarget.search.value;
-            console.log(value);
             handleSubmit(value);
           }}
         >

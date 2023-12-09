@@ -110,7 +110,6 @@ export const appRouter = t.router({
     }),
   entrySearch: t.procedure.input(z.string()).query(async ({ input }) => {
     const results = await prisma.entry.findMany();
-    console.log(results);
     return results.filter((entry) => {
       const titleMatch = entry.title.includes(input);
       const contentMatch = entry.content.includes(input);
