@@ -80,8 +80,9 @@ export const Editor = ({
                 className="p-2 w-full h-[20rem] border border-gray-200 rounded-md resize-none overflow-auto"
               />
               <button
+                disabled={saved}
                 onClick={handleSave}
-                className="absolute bottom-3 right-3"
+                className="absolute bottom-3 right-3 p-2 px-3 rounded-md border-2 border-gray-200 hover:border-gray-400 disabled:opacity-50 disabled:cursor-not-allowed  disabled:hover:border-gray-200 "
               >
                 Save
               </button>
