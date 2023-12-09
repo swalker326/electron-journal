@@ -9,9 +9,15 @@ export const RecentEntries = () => {
     return <>loading...</>;
   }
   return (
-    <div className="relative">
+    <div className="p-2">
       <h2 className="text-xl font-thin">Recent Entries</h2>
-      <Carousel items={data} />
+      {data.length === 0 ? (
+        <div className="text-gray-500">
+          No entries yet. Create one for it to show up here.
+        </div>
+      ) : (
+        <Carousel items={data} />
+      )}
     </div>
   );
 };
