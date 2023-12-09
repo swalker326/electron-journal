@@ -10,15 +10,31 @@ export const Editor = ({
   setNewEntry: Dispatch<SetStateAction<{ title: string; content: string }>>;
 }) => {
   const [saved, setSaved] = useState(true);
+  const [saveTimeout, setSaveTimeout] = useState<NodeJS.Timeout | null>(null);
   const { mutate, data, error } = trpc.entryUpsert.useMutation();
   const handleSave = async () => {
+    console.log(newEntry);
     if (newEntry.title === "" || newEntry.content === "") {
       return;
     }
+    console.log("saving...");
     await mutate({ id: data?.id, ...newEntry });
     setSaved(true);
   };
-  useEffect(() => {});
+  const handleSaveTimeout = () => {
+    if (saveTimeout) {
+      console.log("clearing timeout");
+      clearTimeout(saveTimeout);
+    }
+    if (!saved) {
+      const timeOut = setTimeout(() => {
+        console.log("saving...");
+        handleSave();
+      }, 5000);
+      setSaveTimeout(timeOut);
+    }
+  };
+
   return (
     <div className="w-full h-full flex-grow">
       <h1 className="text-5xl text-red-500 py-1">Thoughts</h1>
@@ -43,6 +59,7 @@ export const Editor = ({
                 value={newEntry.title}
                 className="p-2 rounded-md border border-gray-200"
                 onChange={(e) => {
+                  handleSaveTimeout();
                   setSaved(false);
                   setNewEntry(() => {
                     return { ...newEntry, title: e.target.value };
@@ -53,6 +70,7 @@ export const Editor = ({
                 placeholder="Express yourself..."
                 value={newEntry.content}
                 onChange={(e) => {
+                  handleSaveTimeout();
                   setSaved(false);
                   setNewEntry(() => {
                     return { ...newEntry, content: e.target.value };
@@ -71,7 +89,7 @@ export const Editor = ({
           </TabsContent>
           <TabsContent value="preview">
             <div className="w-full border border-gray-200">
-              <div className="preview bg-white h-[20rem]"></div>
+              <div className="preview bg-white h-[20rem]">{}</div>
             </div>
           </TabsContent>
         </Tabs>
