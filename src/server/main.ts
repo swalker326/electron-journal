@@ -1,12 +1,12 @@
-import {appRouter} from "./router";
-import {app, BrowserWindow, ipcMain, protocol} from 'electron';
+import { appRouter } from "./router";
+import { app, BrowserWindow, ipcMain, protocol } from "electron";
 import path from "path";
-import {ipcRequestHandler} from "./ipcRequestHandler";
-import {IpcRequest} from "../api";
+import { ipcRequestHandler } from "./ipcRequestHandler";
+import { IpcRequest } from "../api";
 import fs from "fs";
-import {dbPath, dbUrl, latestMigration, Migration} from "./constants";
+import { dbPath, dbUrl, latestMigration, Migration } from "./constants";
 import log from "electron-log";
-import {prisma, runPrismaCommand} from "./prisma";
+import { prisma, runPrismaCommand } from "./prisma";
 import { resolveHtmlPath } from "./utils";
 
 const createWindow = async () => {
@@ -78,6 +78,7 @@ const createWindow = async () => {
     width: 1024,
     height: 1024,
     webPreferences: {
+      spellcheck: true,
       preload: path.join(__dirname, "preload.js")
     }
   });
@@ -87,7 +88,7 @@ const createWindow = async () => {
 };
 
 app.whenReady().then(() => {
-  ipcMain.handle('trpc', (event, req: IpcRequest) => {
+  ipcMain.handle("trpc", (event, req: IpcRequest) => {
     return ipcRequestHandler({
       endpoint: "/trpc",
       req,
@@ -96,19 +97,19 @@ app.whenReady().then(() => {
         return {};
       }
     });
-  })
+  });
 
   createWindow();
 
-  app.on('activate', () => {
+  app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) {
       createWindow();
     }
   });
 });
 
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
+app.on("window-all-closed", () => {
+  if (process.platform !== "darwin") {
     app.quit();
   }
 });
