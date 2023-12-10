@@ -7,7 +7,7 @@ export const DeleteDialog = ({ onClick }: { onClick: () => void }) => {
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Trigger asChild>
-        <button className="absolute right-0 border border-red-400 px-2 py-0.5 rounded-md text-red-400 hover:bg-red-100 transition-colors ease-linear duration-100">
+        <button className="border border-red-400 px-2 py-0.5 rounded-md text-red-400 hover:bg-red-100 transition-colors ease-linear duration-100">
           Delete
         </button>
       </Dialog.Trigger>

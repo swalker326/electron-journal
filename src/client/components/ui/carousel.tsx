@@ -61,8 +61,8 @@ export const Carousel = ({
 
   return (
     <div className="relative w-full overflow-hidden">
-      <div className="absolute inset-y-0 left-0 z-10 w-20 bg-gradient-to-r from-white to-transparent blur" />
-      <div className="absolute inset-y-0 right-0 z-10 w-20 bg-gradient-to-l from-white to-transparent blur" />
+      <div className="absolute inset-y-0 left-0 z-10 w-20 bg-gradient-to-r from-white dark:from-gray-900 to-transparent blur" />
+      <div className="absolute inset-y-0 right-0 z-10 w-20 bg-gradient-to-l from-white dark:from-gray-900 to-transparent blur" />
       <div
         ref={sliderRef}
         className="flex items-stretch space-x-4 snap-x snap-mandatory overflow-x-auto p-4 no-scrollbar "

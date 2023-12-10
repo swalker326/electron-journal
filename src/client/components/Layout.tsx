@@ -2,6 +2,8 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import useDebouncedCallback from "../hooks/useDebounceCallback";
 import { Toaster } from "react-hot-toast";
 import { ChevronLeft } from "lucide-react";
+import { Input } from "./ui/input";
+import { DarkmodeSwitch } from "./ui/darkmode-switch";
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
   const handleSubmit = (s: string) => navigate(`/search?q=${s}`);
@@ -17,7 +19,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
   const navigate = useNavigate();
   return (
-    <div className="flex flex-col w-full h-full pt-2 ">
+    <div className="flex flex-col w-full h-full pt-2">
       {/* {location.pathname}
       {location.search} */}
       <div className="flex items-start justify-between ">
@@ -32,20 +34,22 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
             <h1 className="text-5xl">Journal</h1>
           </Link>
         </div>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            const value = e.currentTarget.search.value;
-            handleSubmit(value);
-          }}
-        >
-          <input
-            name="search"
-            className="p-2 rounded-md border border-gray-200"
-            placeholder="Search..."
-            onChange={handleSearchChange}
-          />
-        </form>
+        <div className="flex items-center gap-2">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              const value = e.currentTarget.search.value;
+              handleSubmit(value);
+            }}
+          >
+            <Input
+              name="search"
+              placeholder="Search..."
+              onChange={handleSearchChange}
+            />
+          </form>
+          <DarkmodeSwitch />
+        </div>
       </div>
       <div className="h-full">{children}</div>
     </div>

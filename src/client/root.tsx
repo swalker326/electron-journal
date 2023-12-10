@@ -13,6 +13,7 @@ import { SearchView } from "./routes/search";
 
 import "./global.css";
 import { EntryIdEdit } from "./routes/$entryId/edit";
+
 function Index() {
   const [queryClient] = useState(
     () =>

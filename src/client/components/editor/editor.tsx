@@ -8,6 +8,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { useDebounceSubmit } from "../../hooks/useDebounceSubmit";
 import { DeleteDialog } from "./delete-modal";
 import { Entry } from "../../../generated/client";
+import { Input } from "../ui/input";
 
 const EntrySchema = z.object({
   id: z.string().optional(),
@@ -88,86 +89,79 @@ export const Editor = ({ entry }: { entry?: Entry }) => {
     <div className="w-full h-full flex-grow">
       <h1 className="text-5xl text-red-500 py-1">Thoughts</h1>
       <div>
-        <Tabs defaultValue="edit" className="w-full">
+        {/* <Tabs defaultValue="edit" className="w-full">
           <TabsList className="w-full relative ">
             <TabsTrigger value="edit">Edit</TabsTrigger>
             <TabsTrigger value="preview">Preview</TabsTrigger>
-            <DeleteDialog onClick={handleDelete} />
-            {/* <button className="absolute right-0 border border-red-400 px-2 py-0.5 rounded-md text-red-400 hover:bg-red-100 transition-colors ease-linear duration-100">
-              Delete
-            </button> */}
-          </TabsList>
-          <div className="w-full flex justify-center">
-            {isDirty ? (
-              isSaved ? (
-                <span className="text-gray-400 text-sm font-light">saved</span>
-              ) : (
-                <span className="text-gray-700 text-sm font-light">
-                  *unsaved
-                </span>
-              )
-            ) : (
+          </TabsList> */}
+        <div className="flex justify-end">
+          <DeleteDialog onClick={handleDelete} />
+        </div>
+        <div className="w-full flex justify-center">
+          {isDirty ? (
+            isSaved ? (
               <span className="text-gray-400 text-sm font-light">saved</span>
-            )}
-          </div>
-          <TabsContent value="edit">
-            <div className="w-full flex flex-col gap-2 relative">
-              <form
-                onSubmit={handleSubmit(onSubmit)}
-                className="flex flex-col gap-2"
-              >
-                <div className="relative">
-                  <input
-                    {...register("title")}
-                    placeholder="Title"
-                    className={`p-2 rounded-md border border-gray-200 w-full ${
-                      errors.title
-                        ? "border-red-300 bg-red-100"
-                        : "border-gray-200"
-                    }`}
-                  />
-                  {errors.title && (
-                    <div className=" absolute right-2 top-2">
-                      <span className="text-red-600 p-2">
-                        Try giving your entry a title
-                      </span>
-                    </div>
-                  )}
+            ) : (
+              <span className="text-gray-700 text-sm font-light">*unsaved</span>
+            )
+          ) : (
+            <span className="text-gray-400 text-sm font-light">saved</span>
+          )}
+        </div>
+        {/* <TabsContent value="edit"> */}
+        <div className="w-full flex flex-col gap-2 relative">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="flex flex-col gap-2"
+          >
+            <div className="relative">
+              <Input
+                {...register("title")}
+                error={!!errors.title}
+                placeholder="Title"
+                // className={`${!errors.title && "border-red-300 bg-red-100"}`}
+              />
+              {errors.title && (
+                <div className=" absolute right-2 top-2">
+                  <span className="text-red-600 p-2">
+                    Try giving your entry a title
+                  </span>
                 </div>
-                <div className="relative">
-                  {errors.content && (
-                    <div className="absolute top-2 right-2">
-                      <span className="text-red-500 p-2">
-                        You really should journal something before submitting
-                      </span>
-                    </div>
-                  )}
-                  <textarea
-                    {...register("content")}
-                    placeholder="Express yourself..."
-                    cols={23}
-                    className={`p-2 w-full h-[20rem] border border-gray-200 rounded-md resize-none overflow-auto ${
-                      errors.content
-                        ? "border-red-300 bg-red-100"
-                        : "border-gray-200"
-                    }`}
-                  />
-                  <button
-                    type="submit"
-                    className="transition-colors ease-linear duration-100 absolute bottom-3 right-3 px-2 py-0.5 rounded-md border-2 border-gray-200 hover:border-gray-400 disabled:opacity-50 disabled:cursor-not-allowed  disabled:hover:border-gray-200 "
-                  >
-                    Save
-                  </button>
-                </div>
-              </form>
+              )}
             </div>
-          </TabsContent>
+            <div className="relative">
+              {errors.content && (
+                <div className="absolute top-2 right-2">
+                  <span className="text-red-500 p-2">
+                    You really should journal something before submitting
+                  </span>
+                </div>
+              )}
+              <textarea
+                {...register("content")}
+                placeholder="Express yourself..."
+                cols={23}
+                className={`p-2 w-full h-[20rem] border border-gray-200 rounded-md resize-none overflow-auto ${
+                  errors.content &&
+                  "border-red-300 bg-red-100 dark:bg-red-900 dark:border-red-600"
+                } dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200`}
+              />
+              <button
+                type="submit"
+                className="duration-100 absolute bottom-3 right-3 px-2 py-0.5 rounded-md border-2 border-gray-200 hover:border-gray-400 disabled:opacity-50 disabled:cursor-not-allowed  disabled:hover:border-gray-200 "
+              >
+                Save
+              </button>
+            </div>
+          </form>
+        </div>
+        {/* </TabsContent>
           <TabsContent value="preview">
             <div className="w-full border border-gray-200">
-              <div className="preview bg-white h-[20rem]">{}</div>
+              <div className="preview h-[20rem]">{}</div>
             </div>
           </TabsContent>
-        </Tabs>
+        </Tabs> */}
       </div>
     </div>
   );

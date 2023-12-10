@@ -44,28 +44,6 @@ if (information) {
   information.innerText = `This app is using Chrome (v${window.appApi.chrome()}), Node.js (v${window.appApi.node()}), and Electron (v${window.appApi.electron()})`;
 }
 
-// const loadUsers = async () => {
-//   const user = await trpc.users.query();
-//   const userId1 = await trpc.userById.query(1);
-//   const resp = document.getElementById("resp");
-//   if (resp) {
-//     resp.innerText = JSON.stringify(user, null, 2);
-//   }
-// };
-
-// loadUsers();
-
-// const addUser = async () => {
-//   const user = await trpc.userCreate.mutate({
-//     name: "New User",
-//     dateCreated: new Date()
-//   });
-//   const resp = document.getElementById("resp");
-//   if (resp) {
-//     resp.innerText = JSON.stringify(user, null, 2);
-//   }
-// };
-
 const container = document.getElementById("root") as HTMLElement;
 const root = createRoot(container);
 root.render(<App />);
