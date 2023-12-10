@@ -56,6 +56,7 @@
     "date-fns": "^2.30.0",
     "electron-log": "^4.4.8",
     "lucide-react": "^0.294.0",
+    "marked-react": "^2.0.0",
     "prisma": "^5.7.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

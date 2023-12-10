@@ -1,10 +1,20 @@
-import { Link } from "react-router-dom";
 import { trpc } from "../util";
-import { formatDistanceToNow } from "date-fns";
 import { Carousel } from "./ui/carousel";
+import { Entry } from "../../generated/client";
+import { useEffect, useState } from "react";
 
-export const RecentEntries = () => {
+export const RecentEntries = ({
+  currentEntry
+}: {
+  currentEntry?: Entry | null;
+}) => {
+  const [entries, setCurrentEntries] = useState<Entry[]>([]);
   const { data } = trpc.entries.useQuery();
+  useEffect(() => {
+    if (data) {
+      setCurrentEntries(() => data.filter((d) => d.id != currentEntry?.id));
+    }
+  }, [data, currentEntry]);
 
   return (
     <div className="p-2">

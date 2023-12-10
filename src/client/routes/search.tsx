@@ -3,9 +3,13 @@ import { trpc } from "../util";
 import { format } from "date-fns";
 
 export const SearchView = () => {
+  document.title = "Search";
   const [params] = useSearchParams();
   const q = params.get("q");
   const { data } = trpc.entrySearch.useQuery(q!);
+  if (q !== "") {
+    document.title = `Search: ${q}`;
+  }
   return (
     <div>
       <h1 className="text-5xl text-red-500 py-1">Search</h1>

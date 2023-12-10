@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { trpc } from "../../util";
 import toast from "react-hot-toast";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useDebounceSubmit } from "../../hooks/useDebounceSubmit";
 import { DeleteDialog } from "./delete-modal";
 import { Entry } from "../../../generated/client";
@@ -47,6 +46,7 @@ export const Editor = ({ entry }: { entry?: Entry }) => {
     deleteEntry(data?.id);
   };
   const {
+    control,
     register,
     handleSubmit,
     reset,
@@ -89,11 +89,6 @@ export const Editor = ({ entry }: { entry?: Entry }) => {
     <div className="w-full h-full flex-grow">
       <h1 className="text-5xl text-red-500 py-1">Thoughts</h1>
       <div>
-        {/* <Tabs defaultValue="edit" className="w-full">
-          <TabsList className="w-full relative ">
-            <TabsTrigger value="edit">Edit</TabsTrigger>
-            <TabsTrigger value="preview">Preview</TabsTrigger>
-          </TabsList> */}
         <div className="flex justify-end">
           <DeleteDialog onClick={handleDelete} />
         </div>
@@ -108,18 +103,22 @@ export const Editor = ({ entry }: { entry?: Entry }) => {
             <span className="text-gray-400 text-sm font-light">saved</span>
           )}
         </div>
-        {/* <TabsContent value="edit"> */}
         <div className="w-full flex flex-col gap-2 relative">
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="flex flex-col gap-2"
           >
             <div className="relative">
-              <Input
-                {...register("title")}
-                error={!!errors.title}
-                placeholder="Title"
-                // className={`${!errors.title && "border-red-300 bg-red-100"}`}
+              <Controller
+                name="title"
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    error={!!errors.title}
+                    placeholder="Title"
+                  />
+                )}
               />
               {errors.title && (
                 <div className=" absolute right-2 top-2">
@@ -155,13 +154,6 @@ export const Editor = ({ entry }: { entry?: Entry }) => {
             </div>
           </form>
         </div>
-        {/* </TabsContent>
-          <TabsContent value="preview">
-            <div className="w-full border border-gray-200">
-              <div className="preview h-[20rem]">{}</div>
-            </div>
-          </TabsContent>
-        </Tabs> */}
       </div>
     </div>
   );

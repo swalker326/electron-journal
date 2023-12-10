@@ -60,7 +60,7 @@ function Index() {
     })
   );
   return (
-    <div className="container h-screen">
+    <div className="container min-h-screen">
       <trpc.Provider client={trpcClient} queryClient={queryClient}>
         <QueryClientProvider client={queryClient}>
           <Layout>

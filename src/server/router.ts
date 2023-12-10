@@ -47,7 +47,7 @@ export const appRouter = t.router({
     .query(({ input }) => {
       return prisma.entry.findMany({
         take: input?.limit || 10,
-        orderBy: { updatedAt: "desc" }
+        orderBy: { createdAt: "desc" }
       });
     }),
   entryDelete: t.procedure.input(z.number()).mutation(async ({ input }) => {

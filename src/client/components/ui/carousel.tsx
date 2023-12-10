@@ -1,17 +1,14 @@
 import { useEffect, useRef, useState } from "react";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent
-} from "./card";
+import { Card, CardHeader, CardTitle, CardContent } from "./card";
 import { Link } from "react-router-dom";
+import Markdown from "marked-react";
+import { formatDistance, formatDistanceToNow } from "date-fns";
 
 const CarouselCard = ({
   id,
   title,
-  content
+  content,
+  createdAt
 }: {
   id: number;
   title: string;
@@ -21,12 +18,17 @@ const CarouselCard = ({
   return (
     <div className="snap-center shrink-0 min-h-full ">
       <Link to={`/entries/${id}`}>
-        <Card className="w-[350px] inline-block min-h-full bg-gray-100 hover:bg-white">
-          <CardHeader>
-            <CardTitle>{title}</CardTitle>
+        <Card className="w-[350px] inline-block min-h-full bg-gray-100 hover:bg-white dark:hover:bg-gray-900">
+          <CardHeader className="pb-1">
+            <CardTitle className="text-red-500 font-light">{title}</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-gray-600">{content}</p>
+            <div className="text-gray-500">
+              {formatDistanceToNow(createdAt)}
+            </div>
+            <article className="prose dark:prose-invert mt-2">
+              <Markdown>{content.slice(0, 200)}</Markdown>
+            </article>
           </CardContent>
         </Card>
       </Link>
@@ -60,7 +62,7 @@ export const Carousel = ({
   }, [sliderRef.current]);
 
   return (
-    <div className="relative w-full overflow-hidden">
+    <div className="relative w-full">
       <div className="absolute inset-y-0 left-0 z-10 w-20 bg-gradient-to-r from-white dark:from-gray-900 to-transparent blur" />
       <div className="absolute inset-y-0 right-0 z-10 w-20 bg-gradient-to-l from-white dark:from-gray-900 to-transparent blur" />
       <div
