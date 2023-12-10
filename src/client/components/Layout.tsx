@@ -1,6 +1,7 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import useDebouncedCallback from "../hooks/useDebounceCallback";
 import { Toaster } from "react-hot-toast";
+import { ChevronLeft } from "lucide-react";
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
   const handleSubmit = (s: string) => navigate(`/search?q=${s}`);
@@ -19,11 +20,18 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
     <div className="flex flex-col w-full h-full pt-2 ">
       {/* {location.pathname}
       {location.search} */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-start justify-between ">
         <Toaster />
-        <Link to="/">
-          <h1 className="text-5xl">Journal</h1>
-        </Link>
+        <div>
+          {location.pathname !== "/" && (
+            <button onClick={() => navigate(-1)}>
+              <ChevronLeft />
+            </button>
+          )}
+          <Link to="/">
+            <h1 className="text-5xl">Journal</h1>
+          </Link>
+        </div>
         <form
           onSubmit={(e) => {
             e.preventDefault();

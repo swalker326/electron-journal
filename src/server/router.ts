@@ -45,7 +45,10 @@ export const appRouter = t.router({
   entries: t.procedure
     .input(z.object({ limit: z.number() }).optional())
     .query(({ input }) => {
-      return prisma.entry.findMany({ take: input?.limit || 10 });
+      return prisma.entry.findMany({
+        take: input?.limit || 10,
+        orderBy: { updatedAt: "desc" }
+      });
     }),
   entryDelete: t.procedure.input(z.number()).mutation(async ({ input }) => {
     const entry = await prisma.entry.delete({

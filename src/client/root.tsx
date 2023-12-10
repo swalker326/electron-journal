@@ -1,11 +1,4 @@
-import {
-  createMemoryRouter,
-  Routes,
-  Route,
-  Link,
-  Outlet,
-  RouterProvider
-} from "react-router-dom";
+import { createMemoryRouter, Outlet, RouterProvider } from "react-router-dom";
 import { trpc } from "./util";
 import { loggerLink, httpBatchLink } from "@trpc/client";
 import { useState } from "react";
@@ -13,12 +6,13 @@ import { IpcRequest } from "../api";
 import superjson from "superjson";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Home } from "./views/Home";
-import "./global.css";
 import { Layout } from "./components/Layout";
 import { EntryView } from "./routes/entry";
-import { EntryIdView } from "./routes/$entryId";
+import { EntryIdView } from "./routes/$entryId/view";
 import { SearchView } from "./routes/search";
 
+import "./global.css";
+import { EntryIdEdit } from "./routes/$entryId/edit";
 function Index() {
   const [queryClient] = useState(
     () =>
@@ -88,7 +82,8 @@ const Router = createMemoryRouter([
         path: "/entries",
         children: [
           { index: true, element: <EntryView /> },
-          { path: ":entryId", element: <EntryIdView /> }
+          { path: ":entryId", element: <EntryIdView /> },
+          { path: ":entryId/edit", element: <EntryIdEdit /> }
         ]
       }
     ]

@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useDebounceSubmit } from "../../hooks/useDebounceSubmit";
 import { DeleteDialog } from "./delete-modal";
+import { Entry } from "../../../generated/client";
 
 const EntrySchema = z.object({
   id: z.string().optional(),
@@ -16,7 +17,7 @@ const EntrySchema = z.object({
 
 type EntryType = z.infer<typeof EntrySchema>;
 
-export const Editor = () => {
+export const Editor = ({ entry }: { entry?: Entry }) => {
   const { mutate, data } = trpc.entryUpsert.useMutation({
     onError: (err) => {
       toast.error("Problem saving");
@@ -53,8 +54,8 @@ export const Editor = () => {
   } = useForm({
     resolver: zodResolver(EntrySchema),
     defaultValues: {
-      title: data?.title || "",
-      content: data?.content || ""
+      title: data?.title || entry?.title || "",
+      content: data?.content || entry?.content || ""
     }
   });
 
@@ -64,7 +65,7 @@ export const Editor = () => {
   const onSubmit: SubmitHandler<EntryType> = async ({ content, title }) => {
     console.log(content, title);
     console.log("onSubmit...");
-    mutate({ id: data?.id, content, title });
+    mutate({ id: data?.id || entry?.id, content, title });
   };
 
   const { debouncedSubmit, cancel } = useDebounceSubmit(
