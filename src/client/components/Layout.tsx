@@ -1,11 +1,6 @@
-import {
-  Link,
-  useLocation,
-  useNavigate,
-  useSearchParams
-} from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import useDebouncedCallback from "../hooks/useDebounceCallback";
-import { useState } from "react";
+import { Toaster } from "react-hot-toast";
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
   const handleSubmit = (s: string) => navigate(`/search?q=${s}`);
@@ -25,6 +20,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
       {/* {location.pathname}
       {location.search} */}
       <div className="flex items-center justify-between">
+        <Toaster />
         <Link to="/">
           <h1 className="text-5xl">Journal</h1>
         </Link>

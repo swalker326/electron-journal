@@ -8,6 +8,7 @@ export const SearchView = () => {
   const { data } = trpc.entrySearch.useQuery(q!);
   return (
     <div>
+      <h1 className="text-5xl text-red-500 py-1">Search</h1>
       <h1 className="text-center text-2xl font-thin">results for "{q}"</h1>
       <ul>
         {data?.length === 0 ? (
