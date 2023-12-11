@@ -11,7 +11,7 @@ export const EntryIdView = () => {
   const { entryId } = useParams();
 
   if (!entryId) throw new Error("No entryId");
-  const { data, error } = trpc.entryById.useQuery(parseInt(entryId));
+  const { data, error } = trpc.entryById.useQuery(entryId);
 
   useEffect(() => {
     if (data) {
@@ -35,7 +35,7 @@ export const EntryIdView = () => {
   };
 
   const onDelete = () => {
-    mutate(parseInt(entryId));
+    mutate(entryId);
   };
 
   return (

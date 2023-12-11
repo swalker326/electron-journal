@@ -13,7 +13,7 @@ process.env.DATABASE_URL = dbUrl;
 
 // This needs to be updated every time you create a migration!
 
-export const latestMigration = "20231208172326_";
+export const latestMigration = "20231211002030_";
 export const platformToExecutables: any = {
   win32: {
     migrationEngine:

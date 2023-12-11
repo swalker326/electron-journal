@@ -13,12 +13,13 @@ datasource db {
 }
 
 model User {
-  id   Int    @id @default(autoincrement())
+  id   String @id @unique @default(cuid())
+  pin  String @unique
   name String
 }
 
 model Entry {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @unique @default(cuid())
   title     String
   content   String
   createdAt DateTime @default(now())

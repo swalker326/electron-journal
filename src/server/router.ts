@@ -11,32 +11,25 @@ export const appRouter = t.router({
   users: t.procedure.query(() => {
     return prisma.user.findMany();
   }),
-  userById: t.procedure
-    .input((val: unknown) => {
-      if (typeof val !== "number") {
-        throw new Error("invalid input");
+  userById: t.procedure.input(z.string()).query(({ input: id }) => {
+    return prisma.user.findUnique({
+      where: {
+        id
       }
-      return val;
-    })
-    .query(({ input: id }) => {
-      return prisma.user.findUnique({
-        where: {
-          id
-        }
-      });
-    }),
+    });
+  }),
   userCreate: t.procedure
     .input(
       z.object({
         name: z.string(),
-        dateCreated: z.date()
+        pin: z.string()
       })
     )
-    .mutation(async ({ input: { name, dateCreated } }) => {
-      console.log("Creating user on ", dateCreated.toLocaleString());
+    .mutation(async ({ input: { name, pin } }) => {
       const user = await prisma.user.create({
         data: {
-          name
+          name,
+          pin
         }
       });
 
@@ -50,7 +43,7 @@ export const appRouter = t.router({
         orderBy: { createdAt: "desc" }
       });
     }),
-  entryDelete: t.procedure.input(z.number()).mutation(async ({ input }) => {
+  entryDelete: t.procedure.input(z.string()).mutation(async ({ input }) => {
     const entry = await prisma.entry.delete({
       where: {
         id: input
@@ -79,14 +72,14 @@ export const appRouter = t.router({
   entryUpsert: t.procedure
     .input(
       z.object({
-        id: z.number().optional(),
+        id: z.string().optional(),
         title: z.string(),
         content: z.string()
       })
     )
-    .mutation(async ({ input: { id = -1, title, content } }) => {
+    .mutation(async ({ input: { id = "", title, content } }) => {
       const entry = await prisma.entry.upsert({
-        where: { id: id },
+        where: { id },
         update: {
           title,
           content
@@ -102,7 +95,7 @@ export const appRouter = t.router({
   entryUpdate: t.procedure
     .input(
       z.object({
-        id: z.number(),
+        id: z.string(),
         title: z.string(),
         content: z.string()
       })
@@ -128,20 +121,13 @@ export const appRouter = t.router({
       return titleMatch || contentMatch;
     });
   }),
-  entryById: t.procedure
-    .input((val: unknown) => {
-      if (typeof val !== "number") {
-        throw new Error("invalid input");
+  entryById: t.procedure.input(z.string()).query(({ input: id }) => {
+    return prisma.entry.findUnique({
+      where: {
+        id
       }
-      return val;
-    })
-    .query(({ input: id }) => {
-      return prisma.entry.findUnique({
-        where: {
-          id
-        }
-      });
-    })
+    });
+  })
 });
 
 export type AppRouter = typeof appRouter;

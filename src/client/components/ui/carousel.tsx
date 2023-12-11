@@ -3,18 +3,9 @@ import { Card, CardHeader, CardTitle, CardContent } from "./card";
 import { Link } from "react-router-dom";
 import Markdown from "marked-react";
 import { formatDistance, formatDistanceToNow } from "date-fns";
+import { Entry } from "../../../generated/client";
 
-const CarouselCard = ({
-  id,
-  title,
-  content,
-  createdAt
-}: {
-  id: number;
-  title: string;
-  content: string;
-  createdAt: Date;
-}) => {
+const CarouselCard = ({ id, title, content, createdAt }: Entry) => {
   return (
     <div className="snap-center shrink-0 min-h-full ">
       <Link to={`/entries/${id}`}>
@@ -36,11 +27,7 @@ const CarouselCard = ({
   );
 };
 
-export const Carousel = ({
-  items
-}: {
-  items: { id: number; title: string; content: string; createdAt: Date }[];
-}) => {
+export const Carousel = ({ items }: { items: Entry[] }) => {
   //make my carousel slide left and right using tailwindcss translate
   //when it gets to the end, it should snap back to the beginning
   const sliderRef = useRef<HTMLDivElement>(null);
