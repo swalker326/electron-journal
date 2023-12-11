@@ -1,5 +1,12 @@
-import { createMemoryRouter, Outlet, RouterProvider } from "react-router-dom";
+import {
+  createMemoryRouter,
+  Outlet,
+  redirect,
+  RouterProvider,
+  ScrollRestoration
+} from "react-router-dom";
 import { trpc } from "./util";
+import { trpc as trpcAction } from "./renderer";
 import { loggerLink, httpBatchLink } from "@trpc/client";
 import { useState } from "react";
 import { IpcRequest } from "../api";
@@ -13,6 +20,8 @@ import { SearchView } from "./routes/search";
 
 import "./global.css";
 import { EntryIdEdit } from "./routes/$entryId/edit";
+import { LockScreen } from "./components/lock-screen";
+import { prisma } from "../server/prisma";
 
 function Index() {
   const [queryClient] = useState(
@@ -65,6 +74,7 @@ function Index() {
         <QueryClientProvider client={queryClient}>
           <Layout>
             <Outlet />
+            <ScrollRestoration />
           </Layout>
         </QueryClientProvider>
       </trpc.Provider>
@@ -77,8 +87,19 @@ const Router = createMemoryRouter([
     path: "/",
     element: <Index />,
     children: [
+      {
+        index: true,
+        element: <Home />,
+        loader: () => {
+          console.log("Loading...", this);
+          const isLocked = localStorage.getItem("locked");
+          if (isLocked === "true") {
+            return redirect("/locked");
+          }
+          return { data: {} };
+        }
+      },
       { path: "/search", element: <SearchView /> },
-      { path: "/", element: <Home /> },
       {
         path: "/entries",
         children: [
@@ -88,7 +109,26 @@ const Router = createMemoryRouter([
         ]
       }
     ]
-  }
+  },
+  {
+    path: "/locked",
+    element: <LockScreen />,
+    action: async ({ request }) => {
+      console.log("Action...", this);
+      const user = await trpcAction.userById.query("me");
+      console.log(request);
+      // const { data: user } = trpc.userById.useQuery("me");
+      console.log("USER:", user);
+      if (!user) {
+        return redirect("/locked");
+      }
+      if (user) {
+        localStorage.setItem("locked", "false");
+        return redirect("/");
+      }
+    }
+  },
+  { path: "*", element: <div>Not found</div> }
 ]);
 
 export default function App() {

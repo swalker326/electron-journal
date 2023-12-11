@@ -12,6 +12,7 @@ export const appRouter = t.router({
     return prisma.user.findMany();
   }),
   userById: t.procedure.input(z.string()).query(({ input: id }) => {
+    console.log("Updated g unit");
     return prisma.user.findUnique({
       where: {
         id

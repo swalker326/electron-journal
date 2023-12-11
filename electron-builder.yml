@@ -1,6 +1,6 @@
-productName: ElectronPrismaTrpcExample
-appId: com.funtoimagine.electron-prisma-trpc-example
-copyright: Copyright 2022 Ayron Wohletz
+productName: Journaly
+appId: com.swalker.journaly
+copyright: Copyright 2023 Shane Walker
 afterSign: notarize.js
 publish:
   provider: github

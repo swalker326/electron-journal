@@ -4,8 +4,8 @@ import type { AppRouter } from "../server/router";
 import { IpcRequest } from "../api";
 import superjson from "superjson";
 import App from "./root";
+import "./utils/inactivityTimer";
 
-// export const trpc = createTRPCReact<AppRouter>();
 export const trpc = createTRPCProxyClient<AppRouter>({
   transformer: superjson,
   links: [
