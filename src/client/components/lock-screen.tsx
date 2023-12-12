@@ -73,28 +73,28 @@ export function LockScreen() {
           <div className="flex space-x-4">
             <input
               {...register("code-0")}
-              // type="password"
+              type="password"
               onChange={handleInputChange}
               className="w-16 h-16 border border-gray-800 dark:border-gray-400 bg-white text-center text-2xl font-bold text-gray-700 outline-none rounded-md"
               maxLength={1}
             />
             <input
               {...register("code-1")}
-              // type="password"
+              type="password"
               className="w-16 h-16 border border-gray-800 dark:border-gray-400 bg-white text-center text-2xl font-bold text-gray-700 outline-none rounded-md"
               maxLength={1}
               onChange={handleInputChange}
             />
             <input
               {...register("code-2")}
-              // type="password"
+              type="password"
               className="w-16 h-16 border border-gray-800 dark:border-gray-400 bg-white text-center text-2xl font-bold text-gray-700 outline-none rounded-md"
               maxLength={1}
               onChange={handleInputChange}
             />
             <input
               {...register("code-3")}
-              // type="password"
+              type="password"
               className="w-16 h-16 border border-gray-800 dark:border-gray-400 bg-white text-center text-2xl font-bold text-gray-700 outline-none rounded-md"
               maxLength={1}
               onChange={handleInputChange}
